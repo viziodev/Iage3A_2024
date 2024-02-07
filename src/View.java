@@ -2,9 +2,14 @@ import java.util.List;
 import java.util.Scanner;
 
 import entities.Agence;
+import entities.Cheque;
 import entities.Client;
+import entities.Compte;
+import entities.ETypeCompte;
+import entities.Epargne;
 import services.AgenceService;
 import services.ClientService;
+import services.CompteService;
 
 
 //Fichiers 
@@ -16,8 +21,10 @@ public class View {
     public static void main(String[] args) throws Exception {
        int choix;
         Scanner sc=new Scanner(System.in);
+        //Dependances
         AgenceService agenceService=new AgenceService();
         ClientService clientService=new ClientService();
+        CompteService compteService=new CompteService();
        
         do {
             System.out.println("1-Ajouter une Agence");
@@ -25,6 +32,9 @@ public class View {
             System.out.println("3-Lister une Agence Par un numero"); 
             System.out.println("4-Creer un  Client");
             System.out.println("5-Lister Toutes les Clients"); 
+            System.out.println("6-Ajouter  un  Compte");
+            System.out.println("7-Lister Tous les Comptes"); 
+            System.out.println("8-Lister Tous les Comptes d'un Client"); 
             System.out.println("10-Quitter"); 
              choix=sc.nextInt();
              sc.nextLine();
@@ -88,11 +98,71 @@ public class View {
                      System.out.println("=================================");
                }
                     break;
+
+                    case 6:
+                     System.out.println("Entrer un numero");
+                     numero=sc.nextLine(); 
+                     System.out.println("Entrer le Solde");
+                     double solde=sc.nextDouble();
+                      System.out.println("Veuillez Selectionner un type"); 
+                      System.out.println("1-Cheque");
+                      System.out.println("2-Epargne");
+                     int type=sc.nextInt();
+                     sc.nextLine();
+                      System.out.println("Entrer le Telephone du client");
+                      tel=sc.nextLine(); 
+                      //Rechercher un client a travers son tel(Use Case)
+                        client = clientService.rechercherClientParTel(tel);
+                         if (client==null) {
+                              System.out.println("Entrer un Nom");
+                               nom=sc.nextLine(); 
+                              System.out.println("Entrer un Prenom");
+                              prenom=sc.nextLine();   
+                              client=new Client();
+                              client.setNom(nom);
+                              client.setPrenom(prenom);
+                              client.setTelephone(tel);
+                              clientService.ajouterClient(client);
+                         }
+
+                     if (type==1) {
+                        System.out.println("Entrer les Frais");
+                        double frais=sc.nextDouble();  
+                        Cheque compte=new Cheque();
+                        compte.setNumero(numero);
+                        compte.setSolde(solde);
+                        compte.setFrais(frais);
+                        compte.setType(ETypeCompte.Cheque);
+                        compte.setClient(client);
+                        compteService.ajouterCompte(compte);
+
+                     }else if (type==2) {
+                        System.out.println("Entrer le Taux");
+                        double taux=sc.nextDouble(); 
+                        Epargne compte=new Epargne();
+                        compte.setNumero(numero);
+                        compte.setSolde(solde); 
+                        compte.setTaux(taux);
+                        compte.setType(ETypeCompte.Epargne);
+                        compte.setClient(client);
+                        compteService.ajouterCompte(compte);
+                     }
+                    break;
+                    case 7:
+                    List<Compte> comptes= compteService.listerCompte();
+                     for (Compte cpte: comptes) {
+                          System.out.println("Numero :"+ cpte.getNumero());
+                          System.out.println("Solde :"+ cpte.getSolde());
+                          System.out.println("Type :"+ cpte.getType());
+                          System.out.println("Client :"+ cpte.getClient().getNom()+" "+cpte.getClient().getPrenom());
+                          System.out.println("====================================================================");
+                     }
+                    break;
                 default:
                     break;
             }
 
-        } while (2!=10);
+        } while (choix!=10);
         
     }
 }

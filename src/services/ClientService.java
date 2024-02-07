@@ -16,4 +16,8 @@ public class ClientService {
         clientRepository.insert(client);
     }
 
+    public  Client rechercherClientParTel(String tel){
+        return clientRepository.selectClientByTel(tel);
+    }
+
 }

@@ -9,8 +9,16 @@ public class Compte {
     //Propriete Navigationnelle
      //ManyToOne : Plusieurs compte crees dans une Agence
      Agence agence;
+     //ManyToOne 
+     Client client;
 
     
+    public Client getClient() {
+        return client;
+    }
+    public void setClient(Client client) {
+        this.client = client;
+    }
     public Agence getAgence() {
         return agence;
     }

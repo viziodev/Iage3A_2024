@@ -14,4 +14,13 @@ public class ClientRepository {
       public List<Client> selectAll(){
         return tClients;
       }
+      public Client selectClientByTel(String tel){
+          for (Client client : tClients) {
+              if(client.getTelephone().compareTo(tel)==0){
+                return client;
+              }
+          }
+          return null;
+
+      }
 }

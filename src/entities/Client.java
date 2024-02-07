@@ -1,11 +1,23 @@
 package entities;
 
+import java.util.ArrayList;
+
 public class Client {
     private int id;
     private String nom; 
     private String prenom; 
     private String telephone;
+
+    //Attributs de Navigation 
+    //OneToMany 
+    ArrayList<Compte> compteList=new ArrayList<>();
     
+    public ArrayList<Compte> getCompteList() {
+        return compteList;
+    }
+    public void setCompteList(ArrayList<Compte> compteList) {
+        this.compteList = compteList;
+    }
     public Client() {
     }
     public int getId() {
