@@ -77,17 +77,23 @@ public class View {
                     break;
 
                     case 4:
-                    System.out.println("Entrer un Nom");
-                    String nom=sc.nextLine(); 
-                    System.out.println("Entrer un Prenom");
-                    String prenom=sc.nextLine();   
-                    System.out.println("Entrer le Telephone");
-                    tel=sc.nextLine();  
-                    Client client=new Client();
-                      client.setNom(nom);
-                      client.setPrenom(prenom);
-                      client.setTelephone(tel);
-                      clientService.ajouterClient(client);
+                     System.out.println("Entrer le Telephone");
+                     tel=sc.nextLine();
+                     String nom,prenom;
+                     Client client=  clientService.rechercherClientParTel(tel);
+                     if (client!=null) {
+                          System.out.println("Ce numero de Telephone existe deja");
+                     } else {
+                         System.out.println("Entrer un Nom");
+                         nom=sc.nextLine(); 
+                         System.out.println("Entrer un Prenom");
+                         prenom=sc.nextLine();
+                         client=new Client();
+                         client.setNom(nom);
+                         client.setPrenom(prenom);
+                         client.setTelephone(tel);
+                         clientService.ajouterClient(client);
+                     }
                    break;
                    case 5:
                    List<Client>  clients= clientService.listerClient();
@@ -151,6 +157,7 @@ public class View {
                     case 7:
                     List<Compte> comptes= compteService.listerCompte();
                      for (Compte cpte: comptes) {
+                          System.out.println("Agence  :"+ cpte.getAgence().getNumero()+" "+cpte.getAgence().getAdresse());
                           System.out.println("Numero :"+ cpte.getNumero());
                           System.out.println("Solde :"+ cpte.getSolde());
                           System.out.println("Type :"+ cpte.getType());

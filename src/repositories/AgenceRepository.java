@@ -27,6 +27,17 @@ public class AgenceRepository {
                     , "root", "root");
           //3-Execution et Recuperation
            Statement statement = conn.createStatement();
+           /* 2 Type Execution
+            * Execution des requetes Select 
+                 =>  retourne des donnees , recupere dans une classe appelee ResultSet 
+                 =>  statement.executeQuery(requeteSql) =>  ResultSet 
+                 => Transformer le ResultSet en Objet lorsque la requete retourne 1 Resultat
+                 => Transformer le ResultSet en une liste lorsque la requete retourne plusieurs Resultats  
+
+              Execution des  Autres requetes(insert,update,delete,create,drop...) 
+                 => ne retourne pas des donnees
+                 =>statement.executeUpdate(requeteSql) =>  int (nbre Ligne modifiee par la requte)
+            */
            ResultSet rs=   statement.executeQuery("select * from agence");
              while (rs.next()) {
                //Une ligne du ResultSet ==> Une Agence
@@ -86,7 +97,8 @@ public class AgenceRepository {
                     , "root", "root");
             //3-Execution et Recuperation
              Statement statement = conn.createStatement();
-             int nbreLigne=statement.executeUpdate("INSERT INTO `agence` ( `numero_ag`, `adresse_ag`, `tel_ag`) VALUES ('"+agence.getNumero()+"', '"+agence.getAdresse()+"', '"+agence.getTelephone()+"')");
+            
+             int nbreLigne=statement.executeUpdate("INSERT INTO agence (numero_ag, adresse_ag, tel_ag) VALUES ('"+agence.getNumero()+"', '"+agence.getAdresse()+"', '"+agence.getTelephone()+"')");
              conn.close();
         } catch (ClassNotFoundException e) {
             System.out.println("Erreur de chargement de Driver");
