@@ -6,9 +6,13 @@ import entities.Client;
 import repositories.ClientRepository;
 
 public class ClientService {
-    ClientRepository clientRepository=new ClientRepository();
-   
-   public  List<Client>listerClient(){
+    ClientRepository clientRepository;
+
+    
+   public ClientService(ClientRepository clientRepository) {
+        this.clientRepository = clientRepository;
+    }
+public  List<Client>listerClient(){
     
         return clientRepository.selectAll();
     }

@@ -1,44 +1,24 @@
 package repositories;
 
-
-
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import entities.Agence;
 //SOLID
 //Single Responsability
-public class AgenceRepository {
+public class AgenceRepository extends Database implements IAgence {
+     private final  String SQL_SELECT_ALL="select * from agence" ;
+     private final  String SQL_SELECT_BY_NUM="select * from agence where numero_ag like ? " ;
+     private final  String SQL_INSERT="INSERT INTO agence (numero_ag, adresse_ag, tel_ag) VALUES (?,?,?)";
     //select
     public  List<Agence> selectAll(){
          List<Agence> agences=new ArrayList<>();
        try {
-          //1-Chargement du Driver
-          Class.forName("com.mysql.cj.jdbc.Driver");
-          //2-Se Connecter a une BD
-          //WAMP,XAMP ==> Port 3306 , user =root , MP=""
-          //MAMP ==>           8889         root       root
-          Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:8889/iagea_ism_2024" 
-                    , "root", "root");
-          //3-Execution et Recuperation
-           Statement statement = conn.createStatement();
-           /* 2 Type Execution
-            * Execution des requetes Select 
-                 =>  retourne des donnees , recupere dans une classe appelee ResultSet 
-                 =>  statement.executeQuery(requeteSql) =>  ResultSet 
-                 => Transformer le ResultSet en Objet lorsque la requete retourne 1 Resultat
-                 => Transformer le ResultSet en une liste lorsque la requete retourne plusieurs Resultats  
-
-              Execution des  Autres requetes(insert,update,delete,create,drop...) 
-                 => ne retourne pas des donnees
-                 =>statement.executeUpdate(requeteSql) =>  int (nbre Ligne modifiee par la requte)
-            */
-           ResultSet rs=   statement.executeQuery("select * from agence");
+           openConnexion();
+           initPreparedStatement(SQL_SELECT_ALL);
+           ResultSet rs= executeSelect();
              while (rs.next()) {
                //Une ligne du ResultSet ==> Une Agence
                  Agence ag=new Agence();
@@ -49,9 +29,7 @@ public class AgenceRepository {
                  agences.add(ag);
              }
              rs.close();
-             conn.close();
-        } catch (ClassNotFoundException e) {
-          System.out.println("Erreur de chargement de Driver");
+           closeConnexion();
         }
        catch (SQLException e) {
         System.out.println("Erreur de Connexion a la BD");
@@ -61,14 +39,10 @@ public class AgenceRepository {
     public  Agence selectByNumero(String numero){
         Agence ag=null;
      try {
-        //1-Chargement du Driver
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        //2-Se Connecter a une BD
-        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:8889/iagea_ism_2024" 
-                  , "root", "root");
-        //3-Execution et Recuperation
-         Statement statement = conn.createStatement();
-         ResultSet rs=   statement.executeQuery("select * from agence where numero_ag like '"+numero+"'");
+          openConnexion();
+          initPreparedStatement(SQL_SELECT_BY_NUM);
+          statement.setString(1, numero);
+          ResultSet rs= executeSelect();
            if (rs.next()) {
                //Une ligne du ResultSet ==> Une Agence
                  ag=new Agence();
@@ -78,33 +52,26 @@ public class AgenceRepository {
                  ag.setTelephone(rs.getString("tel_ag"));
            }
            rs.close();
-           conn.close();
-      } catch (ClassNotFoundException e) {
-          System.out.println("Erreur de chargement de Driver");
-      }
-     catch (SQLException e) {
+           closeConnexion();
+      } 
+      catch (SQLException e) {
         System.out.println("Erreur de Connexion a la BD");
     }
       return  ag;
      }
    
     public  void insert(Agence agence){
-     try {
-          //1-Chargement du Driver
-          Class.forName("com.mysql.cj.jdbc.Driver");
-          //2-Se Connecter a une BD
-          Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:8889/iagea_ism_2024" 
-                    , "root", "root");
-            //3-Execution et Recuperation
-             Statement statement = conn.createStatement();
-            
-             int nbreLigne=statement.executeUpdate("INSERT INTO agence (numero_ag, adresse_ag, tel_ag) VALUES ('"+agence.getNumero()+"', '"+agence.getAdresse()+"', '"+agence.getTelephone()+"')");
-             conn.close();
-        } catch (ClassNotFoundException e) {
-            System.out.println("Erreur de chargement de Driver");
-        }
-       catch (SQLException e) {
-          System.out.println("Erreur de Connexion a la BD");
-      }
+            openConnexion();
+            try {
+                initPreparedStatement(SQL_INSERT);
+                statement.setString(1, agence.getNumero());
+                statement.setString(2, agence.getAdresse());
+                statement.setString(3, agence.getTelephone());
+                int nbreLigne=executeUpdate();
+               closeConnexion();
+             } catch (SQLException e) {
+              e.printStackTrace();
+             }
+           
      }
 }

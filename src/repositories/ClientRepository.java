@@ -1,54 +1,37 @@
 package repositories;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import entities.Client;
 
-public class ClientRepository {
-  
+public class ClientRepository extends Database {
+   private final  String SQL_SELECT_ALL="Select * from client" ;
+   private final  String SQL_SELECT_BY_TEL="Select * from client where tel_client like ? " ;
+   private final  String SQL_INSERT="INSERT INTO `client` (`nom_client`, `prenom_client`, `tel_client`) VALUES (?,?,?)";
       public void insert(Client client){
         try {
-    
-           Class.forName("com.mysql.cj.jdbc.Driver");
-           Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:8889/iagea_ism_2024" 
-                    , "root", "root");
-            Statement statement = conn.createStatement();
-            /*
-             * String.format , on remplace les variables de la requete par des code format
-             * %d => variable de Type int 
-             * %s => variable de Type string
-             * %f => variable de Type float
-             */
-             String sql=String.format("INSERT INTO `client` (`nom_client`, `prenom_client`, `tel_client`) "
-                      + " VALUES ('%s', '%s', '%s')",
-                      client.getNom(),client.getPrenom(),client.getTelephone());
-             int nbreLigne=statement.executeUpdate(sql);
-             statement.close();
-             conn.close();
-        } catch (ClassNotFoundException e) {
-            System.out.println("Erreur de chargement de Driver");
-        }
-       catch (SQLException e) {
+          openConnexion();
+          initPreparedStatement(SQL_INSERT);
+          statement.setString(1, client.getNom());
+          statement.setString(2, client.getPrenom());
+          statement.setString(3, client.getTelephone());
+          int nbreLigne=executeUpdate();
+        } 
+         catch (SQLException e) {
           System.out.println("Erreur de Connexion a la BD");
-      }
-      }
+        }
+        }
 
       public List<Client> selectAll(){
          List<Client> clients=new ArrayList<>();
         try {
-    
-          Class.forName("com.mysql.cj.jdbc.Driver");
-          Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:8889/iagea_ism_2024" 
-                   , "root", "root");
-           Statement statement = conn.createStatement();
-           String sql="Select * from client";
-           ResultSet rs=statement.executeQuery(sql);
+          openConnexion();
+          initPreparedStatement(SQL_SELECT_ALL);
+          ResultSet rs= executeSelect();
             while (rs.next()) {
                //Une ligne ==> rs de la requete
                 Client client=new Client();
@@ -60,10 +43,8 @@ public class ClientRepository {
             }
             statement.close();
             rs.close();
-            conn.close();
-       } catch (ClassNotFoundException e) {
-           System.out.println("Erreur de chargement de Driver");
-       }
+             closeConnexion();
+       } 
        catch (SQLException e) {
          System.out.println("Erreur de Connexion a la BD");
        }
@@ -72,13 +53,10 @@ public class ClientRepository {
       public Client selectClientByTel(String tel){
         Client client=null;
         try {
-    
-          Class.forName("com.mysql.cj.jdbc.Driver");
-          Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:8889/iagea_ism_2024" 
-                   , "root", "root");
-           Statement statement = conn.createStatement();
-           String sql=String.format("Select * from client where tel_client like '%s' ",tel);
-           ResultSet rs=statement.executeQuery(sql);
+            openConnexion();
+            initPreparedStatement(SQL_SELECT_BY_TEL);
+            statement.setString(1, tel);
+            ResultSet rs= executeSelect();
             if (rs.next()) {
                //Une ligne ==> rs de la requete
                 client=new Client();
@@ -90,9 +68,7 @@ public class ClientRepository {
             statement.close();
             rs.close();
             conn.close();
-       } catch (ClassNotFoundException e) {
-           System.out.println("Erreur de chargement de Driver");
-       }
+       } 
        catch (SQLException e) {
          System.out.println("Erreur de Connexion a la BD");
        }

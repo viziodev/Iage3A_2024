@@ -1987,9 +1987,9 @@
 										"$ref": "AAAAAAGM0El+ZqAEnSg="
 									},
 									"font": "Arial;13;0",
-									"left": 438,
+									"left": 437,
 									"top": 247,
-									"width": 5.05908203125,
+									"width": 6.5,
 									"height": 13,
 									"alpha": 0.5235987755982988,
 									"distance": 25,
@@ -7505,12 +7505,12 @@
 										"$ref": "AAAAAAGM0CUtvnL13Y4="
 									},
 									"font": "Arial;13;0",
-									"left": 512,
-									"top": 608,
+									"left": 648,
+									"top": 480,
 									"width": 55.65625,
 									"height": 13,
-									"alpha": 1.5707963267948966,
-									"distance": 30,
+									"alpha": 0.8404841573493576,
+									"distance": 207.81963333621778,
 									"hostEdge": {
 										"$ref": "AAAAAAGM0CUtvnL3qcY="
 									},
@@ -7823,7 +7823,8 @@
 								"$ref": "AAAAAAGM0DzcEJeAVfo="
 							},
 							"name": "id",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -7832,7 +7833,8 @@
 								"$ref": "AAAAAAGM0DzcEJeAVfo="
 							},
 							"name": "numero",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -7841,7 +7843,8 @@
 								"$ref": "AAAAAAGM0DzcEJeAVfo="
 							},
 							"name": "adresse",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						}
 					]
 				},
@@ -7861,7 +7864,8 @@
 								"$ref": "AAAAAAGM0D4Ob5fDIss="
 							},
 							"name": "id",
-							"visibility": "protected"
+							"visibility": "protected",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -7870,7 +7874,8 @@
 								"$ref": "AAAAAAGM0D4Ob5fDIss="
 							},
 							"name": "numero",
-							"visibility": "protected"
+							"visibility": "protected",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -7879,7 +7884,8 @@
 								"$ref": "AAAAAAGM0D4Ob5fDIss="
 							},
 							"name": "solde",
-							"visibility": "protected"
+							"visibility": "protected",
+							"type": ""
 						}
 					]
 				},
@@ -7930,7 +7936,8 @@
 								"$ref": "AAAAAAGM0D79ephyN+s="
 							},
 							"name": "id",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -7939,7 +7946,8 @@
 								"$ref": "AAAAAAGM0D79ephyN+s="
 							},
 							"name": "nomComplet",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -7948,7 +7956,8 @@
 								"$ref": "AAAAAAGM0D79ephyN+s="
 							},
 							"name": "tel",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -7957,7 +7966,8 @@
 								"$ref": "AAAAAAGM0D79ephyN+s="
 							},
 							"name": "email",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						}
 					]
 				},
@@ -7991,7 +8001,8 @@
 								"$ref": "AAAAAAGM0EHQnJubME8="
 							},
 							"name": "frais",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						}
 					]
 				},
@@ -8025,7 +8036,8 @@
 								"$ref": "AAAAAAGM0EHm/5vFlZw="
 							},
 							"name": "taux",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						}
 					]
 				},
@@ -8076,7 +8088,8 @@
 								"$ref": "AAAAAAGM0EYGwJwzILc="
 							},
 							"name": "id",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -8085,7 +8098,8 @@
 								"$ref": "AAAAAAGM0EYGwJwzILc="
 							},
 							"name": "numero",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -8094,7 +8108,8 @@
 								"$ref": "AAAAAAGM0EYGwJwzILc="
 							},
 							"name": "dateExpiration",
-							"visibility": "private"
+							"visibility": "private",
+							"type": ""
 						}
 					]
 				}

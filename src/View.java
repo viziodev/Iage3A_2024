@@ -7,6 +7,12 @@ import entities.Client;
 import entities.Compte;
 import entities.ETypeCompte;
 import entities.Epargne;
+import repositories.AgenceRepository;
+import repositories.AgenceRepositoryV1;
+import repositories.AgenceRepositoryV2;
+import repositories.ClientRepository;
+import repositories.CompteRepository;
+import repositories.IAgence;
 import services.AgenceService;
 import services.ClientService;
 import services.CompteService;
@@ -21,10 +27,14 @@ public class View {
     public static void main(String[] args) throws Exception {
        int choix;
         Scanner sc=new Scanner(System.in);
-        //Dependances
-        AgenceService agenceService=new AgenceService();
-        ClientService clientService=new ClientService();
-        CompteService compteService=new CompteService();
+        //Dependances Repository
+         CompteRepository compteRepository=new CompteRepository();
+         ClientRepository clientRepository=new ClientRepository();
+         IAgence agenceRepository=new AgenceRepository();
+        //Dependances Services
+         AgenceService agenceService=new AgenceService(agenceRepository);
+         ClientService clientService=new ClientService(clientRepository);
+         CompteService compteService=new CompteService(compteRepository);
        
         do {
             System.out.println("1-Ajouter une Agence");
@@ -106,14 +116,21 @@ public class View {
                     break;
 
                     case 6:
-                     System.out.println("Entrer un numero");
+                    //Rechercher une Agence a partir de son numero
+                     System.out.println("Entrer le  numero de l'agence");
                      numero=sc.nextLine(); 
-                     System.out.println("Entrer le Solde");
-                     double solde=sc.nextDouble();
-                      System.out.println("Veuillez Selectionner un type"); 
-                      System.out.println("1-Cheque");
-                      System.out.println("2-Epargne");
-                     int type=sc.nextInt();
+                    agence=  agenceService.listerAgence(numero);
+                    if (agence==null) {
+                          System.out.println("Le Numero agence invalide");
+                    } else {
+                       System.out.println("Entrer un numero");
+                       numero=sc.nextLine(); 
+                       System.out.println("Entrer le Solde");
+                        double solde=sc.nextDouble();
+                        System.out.println("Veuillez Selectionner un type"); 
+                        System.out.println("1-Cheque");
+                        System.out.println("2-Epargne");
+                         int type=sc.nextInt();
                      sc.nextLine();
                       System.out.println("Entrer le Telephone du client");
                       tel=sc.nextLine(); 
@@ -140,6 +157,7 @@ public class View {
                         compte.setFrais(frais);
                         compte.setType(ETypeCompte.Cheque);
                         compte.setClient(client);
+                        compte.setAgence(agence);
                         compteService.ajouterCompte(compte);
 
                      }else if (type==2) {
@@ -151,8 +169,11 @@ public class View {
                         compte.setTaux(taux);
                         compte.setType(ETypeCompte.Epargne);
                         compte.setClient(client);
+                        compte.setAgence(agence);
                         compteService.ajouterCompte(compte);
                      }
+
+                    }
                     break;
                     case 7:
                     List<Compte> comptes= compteService.listerCompte();

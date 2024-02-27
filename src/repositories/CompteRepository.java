@@ -1,10 +1,8 @@
 package repositories;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,22 +13,47 @@ import entities.Compte;
 import entities.ETypeCompte;
 import entities.Epargne;
 
-public class CompteRepository {
-   
+public class CompteRepository extends Database {
+   private final  String SQL_SELECT_ALL="SELECT * FROM `compte` c, client cl,agence a WHERE c.client_id=cl.id_client and c.agence_id=a.id_ag;" ;
+   private final  String SQL_SELECT_BY_TEL="Select * from client where tel_client like ? " ;
+   private final  String SQL_INSERT="INSERT INTO `compte` ( `numero_cpte`, `solde_cpte`, `frais_cpte`, `type_cpte`, `taux_cpte`, `client_id`, `agence_id`)  VALUES (?,?,?,?,?,?,?)";
       public void insert(Compte compte){
-        
+         double frais=0,taux=0;
+            if (compte.getType()==ETypeCompte.Cheque) {
+                  Cheque cheque= (Cheque)compte;
+                  frais=cheque.getFrais();
+            } else {
+                  Epargne epargne= (Epargne)compte;
+                  taux=epargne.getTaux();
+         }
+
+         try {
+            openConnexion();
+            initPreparedStatement(SQL_INSERT);
+             //Conversion
+             statement.setString(1, compte.getNumero());
+             statement.setDouble(2,compte.getSolde());
+             statement.setDouble(3,frais);
+             statement.setDouble(4,compte.getType().ordinal());
+             statement.setDouble(5,taux);
+             statement.setInt(7, compte.getAgence().getId());
+             statement.setInt(6, compte.getClient().getId());
+             int nbreLigne=statement.executeUpdate();
+             statement.close();
+             closeConnexion();
+      }
+     catch (SQLException e) {
+        System.out.println("Erreur de Connexion a la BD");
+    }
+
       }
 
       public List<Compte> selectAll(){
          List<Compte> comptes=new ArrayList<>();
           try {
-    
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:8889/iagea_ism_2024" 
-                   , "root", "root");
-             Statement statement = conn.createStatement();
-             String sql="SELECT * FROM `compte` c, client cl,agence a WHERE c.client_id=cl.id_client and c.agence_id=a.id_ag;";
-             ResultSet rs=statement.executeQuery(sql);
+            openConnexion();
+            initPreparedStatement(SQL_SELECT_ALL);
+            ResultSet rs= executeSelect();
             while (rs.next()) {
                //Une ligne ==> rs de la requete
                 Client client=new Client();
@@ -70,9 +93,7 @@ public class CompteRepository {
             statement.close();
             rs.close();
             conn.close();
-       } catch (ClassNotFoundException e) {
-           System.out.println("Erreur de chargement de Driver");
-       }
+       } 
        catch (SQLException e) {
          System.out.println("Erreur de Connexion a la BD");
        }

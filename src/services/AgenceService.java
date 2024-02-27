@@ -3,12 +3,15 @@ package services;
 import java.util.List;
 
 import entities.Agence;
-import repositories.AgenceRepository;
+import repositories.IAgence;
 
 public class AgenceService {
-    private AgenceRepository agenceRepository=new AgenceRepository();
-    
-  public List<Agence> listerAgence(){
+     private IAgence agenceRepository;
+     //Injection Dependance
+     public AgenceService(IAgence agenceRepository) {
+        this.agenceRepository = agenceRepository;
+     }
+   public List<Agence> listerAgence(){
       return agenceRepository.selectAll();
    }
    public Agence listerAgence(String numero){
